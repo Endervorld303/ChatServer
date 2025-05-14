@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ClientManager extends Thread{
+    protected static int nClient = 0;
+    protected int clientID;
     protected Socket socket;//Socket del client
     protected Reader reader;
     protected Writer writer;
@@ -19,6 +21,8 @@ public class ClientManager extends Thread{
         reader = new Reader(socket);
         writer = new Writer(socket);
         running = true;
+        nClient++;
+        clientID = nClient;
     }
 
     public void setMessageListener(MessageListener listener) {
@@ -47,7 +51,7 @@ public class ClientManager extends Thread{
 
     public void write(String msg){
         try {
-            writer.write(msg);
+            writer.write(this.clientID + ": " +  msg);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
